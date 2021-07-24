@@ -4,9 +4,10 @@ module.exports = {
   createString: (template, params = {}) => {
     return new Function(
       'params',
-      `return (
-        (${Object.keys(params).join(', ')}) => \`${template}\`
-        )(...Object.values(params))`
+      `return JSON.parse((
+        (${Object.keys(params).join(', ')}) => \`${JSON.stringify(template)}\`
+        )(...Object.values(params)))`
     )(params);
   },
+  emoji: (code) => String.fromCodePoint(code),
 };
