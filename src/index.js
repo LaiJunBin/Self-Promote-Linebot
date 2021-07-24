@@ -5,6 +5,17 @@ const textKey = require('./const/textKey');
 async function textHandler(context) {
   const { event } = context;
   const { text: message } = event;
+
+  // rich-menu operations
+  switch (message) {
+    case textKey.more:
+      await context.linkRichMenu(process.env.MORE_RICH_MENU);
+      return await context.sendText('已切換選單!');
+    case textKey.back:
+      await context.linkRichMenu(process.env.DEFAULT_RICH_MENU);
+      return await context.sendText('已切換選單!');
+  }
+
   await delay(500);
 
   switch (message) {
