@@ -5,6 +5,7 @@ const textKey = require('./const/textKey');
 async function textHandler(context) {
   const { event } = context;
   const { text: message } = event;
+  await delay(500);
 
   switch (message) {
     case textKey.portfolios:
@@ -13,6 +14,8 @@ async function textHandler(context) {
         context.push([messages.portfolios.body]);
       });
       break;
+    case textKey.github:
+      return await context.send([messages.github]);
     default:
       return await context.sendText(
         createString(messages.receive, {
