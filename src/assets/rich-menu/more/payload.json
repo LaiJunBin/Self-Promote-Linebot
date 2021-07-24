@@ -39,8 +39,9 @@
         "height": 843
       },
       "action": {
-        "type": "message",
-        "text": "回前頁"
+        "type": "postback",
+        "text": "",
+        "data": "type=switchRichMenu&target=DEFAULT_RICH_MENU"
       }
     },
     {

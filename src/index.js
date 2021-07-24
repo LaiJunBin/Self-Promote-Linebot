@@ -1,22 +1,7 @@
 const messages = require('./messages');
-const { delay, createString } = require('./lib/utils');
+const { delay, createString, parseQuery } = require('./lib/utils');
 const textKey = require('./const/textKey');
-
-async function richMenuHandler(context) {
-  const { event } = context;
-  const { text: message } = event;
-
-  switch (message) {
-    case textKey.more:
-      await context.linkRichMenu(process.env.MORE_RICH_MENU);
-      return await context.sendText('已切換選單!');
-    case textKey.back:
-      await context.linkRichMenu(process.env.DEFAULT_RICH_MENU);
-      return await context.sendText('已切換選單!');
-  }
-
-  return false;
-}
+const postbackKey = require('./const/postbackKey');
 
 async function skillMessageHandler(context) {
   const { event } = context;
@@ -74,13 +59,21 @@ async function normalMessageHandler(context) {
 }
 
 async function textHandler(context) {
-  // rich-menu operations
-  if ((await richMenuHandler(context)) !== false) return;
-
   await delay(500);
-  if ((await skillMessageHandler(context)) !== false) return;
+  if (await skillMessageHandler(context)) return;
 
   await normalMessageHandler(context);
+}
+
+async function postbackHandler(context) {
+  const { event } = context;
+  const { data } = event.postback;
+  const query = parseQuery(data);
+
+  switch (query.type) {
+    case postbackKey.switchRichMenu:
+      return await context.linkRichMenu(process.env[query.target]);
+  }
 }
 
 module.exports = async function App(context) {
@@ -88,6 +81,8 @@ module.exports = async function App(context) {
   switch (true) {
     case event.isText:
       return textHandler(context);
+    case event.isPostback:
+      return postbackHandler(context);
   }
 
   return await context.sendText(messages.unknown);

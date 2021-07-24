@@ -10,4 +10,13 @@ module.exports = {
     )(params);
   },
   emoji: (code) => String.fromCodePoint(code),
+  parseQuery: (data) =>
+    JSON.parse(
+      '{"' +
+        decodeURI(data)
+          .replace(/"/g, '\\"')
+          .replace(/&/g, '","')
+          .replace(/=/g, '":"') +
+        '"}'
+    ),
 };

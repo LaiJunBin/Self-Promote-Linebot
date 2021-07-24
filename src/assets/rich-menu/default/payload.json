@@ -51,8 +51,9 @@
         "height": 843
       },
       "action": {
-        "type": "message",
-        "text": "了解更多"
+        "type": "postback",
+        "text": "",
+        "data": "type=switchRichMenu&target=MORE_RICH_MENU"
       }
     }
   ]
