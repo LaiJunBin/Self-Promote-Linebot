@@ -3,24 +3,11 @@ const { delay, createString, parseQuery } = require('./lib/utils');
 const textKey = require('./const/textKey');
 const postbackKey = require('./const/postbackKey');
 
-async function skillMessageHandler(context) {
+async function textHandler(context) {
   const { event } = context;
   const { text: message } = event;
 
-  if (message in textKey.skills) {
-    await context.sendText(messages.skills[message]);
-    delay(1000).then(() => {
-      context.push([messages.morePromote]);
-    });
-    return true;
-  }
-
-  return false;
-}
-
-async function normalMessageHandler(context) {
-  const { event } = context;
-  const { text: message } = event;
+  await delay(500);
 
   switch (message) {
     case textKey.portfolios:
@@ -58,13 +45,6 @@ async function normalMessageHandler(context) {
   }
 }
 
-async function textHandler(context) {
-  await delay(500);
-  if (await skillMessageHandler(context)) return;
-
-  await normalMessageHandler(context);
-}
-
 async function postbackHandler(context) {
   const { event } = context;
   const { data } = event.postback;
@@ -73,6 +53,11 @@ async function postbackHandler(context) {
   switch (query.type) {
     case postbackKey.switchRichMenu:
       return await context.linkRichMenu(process.env[query.target]);
+    case postbackKey.showSkill:
+      await context.sendText(messages.skills[query.target]);
+      delay(1000).then(() => {
+        context.push([messages.morePromote]);
+      });
   }
 }
 

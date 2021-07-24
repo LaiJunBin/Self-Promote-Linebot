@@ -1,4 +1,5 @@
 const textKey = require('../const/textKey');
+const postbackKey = require('../const/postbackKey');
 
 module.exports = {
   type: 'template',
@@ -8,9 +9,9 @@ module.exports = {
     title: '相關技能',
     text: '點選下列按鈕進行操作',
     actions: Object.keys(textKey.skills).map((key) => ({
-      type: 'message',
+      type: 'postback',
       label: textKey.skills[key],
-      text: key,
+      data: `type=${postbackKey.showSkill}&target=${key}`,
     })),
   },
 };
